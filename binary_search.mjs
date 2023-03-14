@@ -1,6 +1,6 @@
 const tableau = new Array(100000000).fill().map((x, i) => i + 1);
 
-const numberToGuess = Math.floor(Math.random() * 100000000);
+const numberToGuess = 100000000;
 
 let numberOffries = 0;
 
