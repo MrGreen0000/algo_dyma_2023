@@ -7,7 +7,7 @@ console.log("numberToGuess :", numberToGuess);
 function simpleSearch(tableau, numberToGuess) {
     for (let i = 0; i < tableau.length; i++) {
         if (tableau[i] === numberToGuess) {
-            return tableau[i];
+            return i;
         }
     }
 }
@@ -15,3 +15,4 @@ function simpleSearch(tableau, numberToGuess) {
 const result = simpleSearch(tableau, numberToGuess);
 
 console.log("result :", result);
+console.log("result :", tableau[result]);
