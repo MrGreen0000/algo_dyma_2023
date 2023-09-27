@@ -477,3 +477,169 @@ function solution(string) {
 }
 
 console.log(solution("camelcase"));
+
+function isIsogram(str) {
+  //...
+
+  const lowerStr = str.toLowerCase();
+
+  const encounteredLetters = {};
+
+  for (let i = 0; i < str.length; i++) {
+    const letter = lowerStr[i];
+
+    if (encounteredLetters[letter]) {
+      return false;
+    }
+    encounteredLetters[letter] = true;
+  }
+  return true;
+}
+
+function isIsogram2(str) {
+  return new Set(str.toUpperCase()).size == str.length;
+}
+
+function nbYear(p0, percent, aug, p) {
+  // your code
+
+  let n = 0;
+
+  let newp0 = p0;
+
+  while (newp0 < p) {
+    let population = Math.floor((newp0 += newp0 * (percent / 100) + aug));
+    newp0 = population;
+    n++;
+
+    if (newp0 >= p) {
+      break;
+    }
+  }
+
+  return n;
+}
+
+function getMiddle(s) {
+  //Code goes here!
+  const isEvenLength = s.length % 2 === 0;
+  const middleIndex = Math.floor(s.length / 2);
+
+  if (isEvenLength) {
+    return s.substring(middleIndex - 1, middleIndex + 1);
+  } else {
+    return s.charAt(middleIndex);
+  }
+}
+
+const stringToNumber = function (str) {
+  // put your code here
+
+  const value = parseInt(str);
+
+  return value;
+};
+
+const stringToNumber2 = function (str) {
+  // put your code here
+
+  return Number(str);
+};
+
+console.log(stringToNumber2("23343434242"));
+
+function comp(array1, array2) {
+  //your code here
+
+  if (!array1 || !array2) {
+    return false;
+  }
+
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  const sortedArray1 = array1.sort((a, b) => a - b);
+  const sortedArray2 = array2.sort((a, b) => a - b);
+
+  for (let i = 0; i < sortedArray1.length; i++) {
+    if (sortedArray1[i] * sortedArray1[i] !== sortedArray2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+console.log(
+  comp(
+    [121, 144, 19, 161, 19, 144, 19, 11],
+    [
+      11 * 11,
+      121 * 121,
+      144 * 144,
+      19 * 19,
+      161 * 161,
+      19 * 19,
+      144 * 144,
+      19 * 19,
+    ]
+  )
+);
+
+function towerBuilder(nFloors) {
+  // build here
+
+  const tower = [];
+
+  for (let i = 0; i < nFloors; i++) {
+    const spaces = " ".repeat(nFloors - i - 1);
+    const stars = "*".repeat(2 * i + 1);
+    const floor = spaces + stars + spaces;
+    tower.push(floor);
+  }
+
+  return tower;
+}
+
+const tower3Floors = towerBuilder(5);
+
+// Affichage de la tour
+for (const floor of tower3Floors) {
+  console.log(floor);
+}
+
+function noSpace(x) {
+  return x.split(" ").join("");
+}
+
+console.log(noSpace("lkfpkfekfep ferferf  fefe df fereere"));
+
+function disemvowel(str) {
+  return str.replace(/[aéeiou\s.']/gi, "");
+}
+console.log(
+  disemvowel("Je suis un développeur et j'ai en moi une fOrce extraOrdinaire")
+);
+
+function nombreSuivant(number) {
+  let nombreDepart = number;
+  let nombresSuivants = [];
+
+  for (let i = 0; i <= 10; i++) {
+    nombresSuivants.push(nombreDepart + i);
+  }
+  return nombresSuivants;
+}
+
+console.log(nombreSuivant(2));
+
+function saisirNombre(number) {
+  if (number <= 1 && number >= 3) {
+    return "Réponse valide";
+  } else {
+    return "Réponse invalide";
+  }
+}
+
+console.log(saisirNombre(4));
