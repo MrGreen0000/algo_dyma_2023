@@ -11,6 +11,11 @@ export class LinkedList {
     this.size = 0;
   }
 
+  clear() {
+    this.head = null;
+    this.size = 0;
+  }
+
   addFirst(value) {
     this.head = new Node(value, this.head);
     this.size++;
