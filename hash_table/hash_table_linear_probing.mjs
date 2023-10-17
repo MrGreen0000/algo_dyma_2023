@@ -1,7 +1,12 @@
 class HashTableLinearProbing {
+  static primeNumbers = [
+    5, 7, 11, 23, 47, 97, 197, 797, 1597, 3203, 6421, 12853, 25717, 51437,
+    102877, 205759, 411527, 823117, 1646237, 3292489, 6584083, 13169977,
+  ];
   constructor() {
-    this.table = new Array(97);
+    this.table = new Array(5);
     this.size = 0;
+    this.MAX_LOADING_FACTOR = 0.75;
   }
 
   // division clé % taile de la table
@@ -22,6 +27,26 @@ class HashTableLinearProbing {
       return 0;
     } else {
       return index + 1;
+    }
+  }
+
+  getNextPrime(prime) {
+    for (let i = 0; i < HashTableLinearProbing.primeNumbers.length; i++) {
+      if (HashTableLinearProbing.primeNumbers[i] > prime * 2) {
+        return HashTableLinearProbing.primeNumbers[i];
+      }
+    }
+    throw new Error("hash table max capacity reached !");
+  }
+
+  rehash() {
+    const oldTable = this.table;
+    this.table = new Array(this.getNextPrime(this.table.length));
+    this.size = 0;
+    for (let i = 0; i < oldTable.length; i++) {
+      if (oldTable[i]) {
+        this.set(oldTable[i].key, oldTable[i].value);
+      }
     }
   }
 
@@ -81,6 +106,9 @@ class HashTableLinearProbing {
         this.size++;
       }
     }
+    if (this.size / this.table.length > this.MAX_LOADING_FACTOR) {
+      this.rehash();
+    }
   }
 
   delete(key) {
@@ -117,17 +145,11 @@ class HashTableLinearProbing {
   }
 }
 
-const hash = new HashTableLinearProbing();
+const table = new HashTableLinearProbing();
 
-const hello = "world";
-const user = {
-  id: "123",
-  name: "Jean",
-};
-
-hash.set(hello);
-hash.set(user.id, user);
-
-console.log(hash);
-console.log(hash.get("world"));
-console.log(hash.get("123"));
+table.set("a", 1);
+console.log(table);
+table.set("b", 1);
+table.set("c", 1);
+table.set("d", 1);
+console.log(table);
