@@ -1,3 +1,5 @@
+import { Queue } from "../queue/queue_ll.mjs";
+
 class Node {
   constructor(key) {
     this.key = key;
@@ -159,6 +161,19 @@ export default class BinarySearchTree {
       console.log(node.key);
     }
   }
+
+  breadthFirstSearch() {
+    const queue = new Queue();
+    queue.enqueue(this.root);
+    while (!queue.isEmpty()) {
+      const node = queue.dequeue();
+      if (node) {
+        console.log(node.key);
+        queue.enqueue(node.left);
+        queue.enqueue(node.right);
+      }
+    }
+  }
 }
 
 const tree = new BinarySearchTree();
@@ -172,4 +187,4 @@ tree.insert(14);
 tree.insert(31);
 tree.insert(42);
 
-tree.preOrder();
+tree.breadthFirstSearch();
