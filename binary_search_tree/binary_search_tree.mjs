@@ -123,23 +123,53 @@ export default class BinarySearchTree {
       }
     }
   }
+
+  preOrder() {
+    this.preOrderWalk(this.root);
+  }
+
+  preOrderWalk(node) {
+    if (node) {
+      console.log(node.key);
+      this.preOrderWalk(node.left);
+      this.preOrderWalk(node.right);
+    }
+  }
+
+  inOrder() {
+    this.inOrderWalk(this.root);
+  }
+
+  inOrderWalk(node) {
+    if (node) {
+      this.inOrderWalk(node.left);
+      console.log(node.key);
+      this.inOrderWalk(node.right);
+    }
+  }
+
+  postOrder() {
+    this.postOrderWalk(this.root);
+  }
+
+  postOrderWalk(node) {
+    if (node) {
+      this.postOrderWalk(node.left);
+      this.postOrderWalk(node.right);
+      console.log(node.key);
+    }
+  }
 }
 
 const tree = new BinarySearchTree();
 
-tree.insert(5);
-tree.insert(3);
 tree.insert(12);
-tree.insert(1);
-tree.insert(4);
-tree.insert(8);
-tree.insert(20);
 tree.insert(7);
+tree.insert(24);
+tree.insert(3);
+tree.insert(8);
 tree.insert(14);
-tree.insert(25);
-tree.insert(37);
+tree.insert(31);
+tree.insert(42);
 
-tree.delete(12);
-
-console.log(tree.search(5));
-console.log(tree.search(14));
+tree.preOrder();
