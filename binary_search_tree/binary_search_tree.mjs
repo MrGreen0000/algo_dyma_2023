@@ -62,6 +62,14 @@ export default class BinarySearchTree {
     return current;
   }
 
+  minFromNode(node) {
+    let current = node;
+    while (current.left) {
+      current = current.left;
+    }
+    return current;
+  }
+
   max() {
     let current = this.root;
     while (current.right) {
@@ -92,25 +100,46 @@ export default class BinarySearchTree {
       node.left = this.deleteNode(node.left, key);
       return node;
     } else {
-      //key ===
+      // key === node.key => 3 cases
 
-      return null;
+      // case 1 : no child
+      if (!node.left && !node.right) {
+        return null;
+      }
+      // case 2 : 1 child
+      else if (!node.right) {
+        node = node.left;
+        return node;
+      } else if (!node.left) {
+        node = node.right;
+        return node;
+      }
+      // case 3 : 2 children
+      else {
+        const minNode = this.minFromNode(node.right);
+        node.key = minNode.key;
+        node.right = this.deleteNode(node.right, minNode.key);
+        return node;
+      }
     }
   }
 }
 
 const tree = new BinarySearchTree();
 
+tree.insert(5);
+tree.insert(3);
+tree.insert(12);
 tree.insert(1);
 tree.insert(4);
-tree.insert(42);
-tree.insert(6);
-tree.insert(12);
-tree.insert(15);
-tree.insert(23);
-tree.insert(2);
+tree.insert(8);
+tree.insert(20);
+tree.insert(7);
+tree.insert(14);
+tree.insert(25);
+tree.insert(37);
 
-console.log(tree.search(55));
-console.log(tree.search(12));
-console.log(tree.min());
-console.log(tree.max());
+tree.delete(12);
+
+console.log(tree.search(5));
+console.log(tree.search(14));
