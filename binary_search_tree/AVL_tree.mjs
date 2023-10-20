@@ -5,16 +5,102 @@ class Node {
     this.key = key;
     this.left = null;
     this.right = null;
+    this.height = 1;
   }
 }
 
-export default class ACVTree {
+export default class AVLTree {
   constructor() {
     this.root = null;
   }
 
+  getNodeHeight(n) {
+    if (n) {
+      return n.height;
+    } else {
+      return 0;
+    }
+  }
+
+  setNodeHeight(n) {
+    return (
+      Math.max(this.getNodeHeight(n.left), this.getNodeHeight(n.right)) + 1
+    );
+  }
+
+  getBalanceFactor(n) {
+    return this.getNodeHeight(n.left) - this.getNodeHeight(n.right);
+  }
+
+  // Avant la rotation gauche                 Après la rotation gauche
+  //  x                                       y
+  //      y                               x       z
+  //  #          Z                            #
+
+  // Rotation gauche
+  // T1, T2, T3 sont les sous-arbres
+  //         x                               y
+  //        / \      Rotation gauche (y)    /  \
+  //       T1  y    - - - - - - - - ->     x    T3
+  //          / \   <- - - - - - - - -    /  \
+  //        T2  T3   Rotation droite (x) T1   T2
+
+  leftRotation(x) {
+    const y = x.right;
+    x.right = y.left;
+    y.left = x;
+    x.height = this.setNodeHeight(x);
+    y.height = this.setNodeHeight(y);
+    return y;
+  }
+
+  // Avant la rotation droite                 Après la rotation droite
+  //        x                                   y
+  //    y                                   z       x
+  //Z       #                                   #
+
+  // Rotation droite
+  // T1, T2, T3 sont les sous-arbres
+  //         y                               x
+  //        / \     Rotation droite (x)     /  \
+  //       x   T3   - - - - - - - - ->     T1   y
+  //      / \       <- - - - - - - - -         / \
+  //     T1  T2     Rotation gauche (y)       T2  T3
+  rightRotation(x) {
+    const y = x.left;
+    x.left = y.right;
+    y.right = x;
+    x.height = this.setNodeHeight(x);
+    y.height = this.setNodeHeight(y);
+    return y;
+  }
+
   //      10
   //20          30
+
+  balanceNode(node, balanceFactor) {
+    if (balanceFactor > 1) {
+      // Gauche gauche ou gauche droite
+      if (this.getBalanceFactor(node.left) >= 0) {
+        // gauche gauche
+        return this.rightRotation(node);
+      } else {
+        // gauche droite
+        node.left = this.leftRotation(node.left);
+        return this.rightRotation(node);
+      }
+    } else if (balanceFactor < -1) {
+      // Droite droite ou droite gauche
+      if (this.getBalanceFactor(node.right) <= 0) {
+        // droite droite
+        return this.leftRotation(node);
+      } else {
+        // droite gauche
+        node.right = this.rightRotation(node.right);
+        return this.leftRotation(node);
+      }
+    }
+  }
 
   insert(key) {
     this.root = this.insertNode(this.root, key);
@@ -25,12 +111,19 @@ export default class ACVTree {
       return new Node(key);
     } else if (key > node.key) {
       node.right = this.insertNode(node.right, key);
-      return node;
     } else if (key < node.key) {
       node.left = this.insertNode(node.left, key);
+    } else {
       return node;
     }
-    return node;
+
+    node.height = this.setNodeHeight(node);
+    const balanceFactor = this.getBalanceFactor(node);
+    if (balanceFactor > 1 || balanceFactor < -1) {
+      return this.balanceNode(node, balanceFactor);
+    } else {
+      return node;
+    }
   }
 
   search(key) {
@@ -62,6 +155,7 @@ export default class ACVTree {
     while (current.left) {
       current = current.left;
     }
+    s;
     return current;
   }
 
@@ -90,10 +184,8 @@ export default class ACVTree {
       return null;
     } else if (key > node.key) {
       node.right = this.deleteNode(node.right, key);
-      return node;
     } else if (key < node.key) {
       node.left = this.deleteNode(node.left, key);
-      return node;
     } else {
       // key === node.key => 3 cases
 
@@ -104,31 +196,46 @@ export default class ACVTree {
       // case 2 : 1 child
       else if (!node.right) {
         node = node.left;
-        return node;
       } else if (!node.left) {
         node = node.right;
-        return node;
       }
       // case 3 : 2 children
       else {
         const minNode = this.minFromNode(node.right);
         node.key = minNode.key;
         node.right = this.deleteNode(node.right, minNode.key);
-        return node;
       }
     }
+    node.height = this.setNodeHeight(node);
+    const balanceFactor = this.getBalanceFactor(node);
+    if (balanceFactor > 1 || balanceFactor < -1) {
+      return this.balanceNode(node, balanceFactor);
+    } else {
+      return node;
+    }
+  }
+
+  print() {
+    console.log(JSON.stringify(this.root, null, 2));
   }
 }
 
-const tree = new ACVTree();
+const tree = new AVLTree();
 
-tree.insert(12);
-tree.insert(7);
-tree.insert(24);
+tree.insert(1);
+tree.insert(2);
 tree.insert(3);
-tree.insert(8);
-tree.insert(14);
-tree.insert(31);
-tree.insert(42);
+tree.insert(4);
+tree.insert(5);
 
-console.log(tree);
+tree.print();
+
+// 1
+//     2
+//         3
+//             4
+//                 5
+
+//     2
+// 1       4
+//     3       5
